@@ -1,14 +1,14 @@
 package com.banking.transactions.model;
 
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import java.time.LocalDate;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 
 @Getter
@@ -26,8 +26,8 @@ public class Transaction {
 
     private LocalDate date;
 
-    private String accountId;
+    private String sourceAccountId;
 
-    private String externalAccountId;
+    private String destinationAccountId;
 
 }
