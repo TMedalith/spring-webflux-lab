@@ -1,50 +1,52 @@
 package com.banking.transactions.controller;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.banking.transactions.dto.AmountRequest;
-import com.banking.transactions.dto.RequestTransfer;
-import com.banking.transactions.model.Transaction;
+import com.banking.transactions.dto.TransactionResponse;
+import com.banking.transactions.dto.TransferRequest;
 import com.banking.transactions.service.TransactionService;
-import org.springframework.web.bind.annotation.*;
+
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.math.BigDecimal;
-
 @RestController
-@RequestMapping("/transactions")
+@RequestMapping("api/v1/transactions")
 public class TransactionController {
 
     private final TransactionService transactionService;
-
+    
     public TransactionController(TransactionService transactionService) {
         this.transactionService = transactionService;
     }
 
-    @GetMapping("/{accountId}")
-    public Flux<Transaction> history(@PathVariable String accountId) {
+    @GetMapping("/accounts/{accountId}")
+    public Flux<TransactionResponse> history(@PathVariable String accountId) {
         return transactionService.history(accountId);
     }
 
     @GetMapping
-    public Flux<Transaction> getAllTransactions(){
+    public Flux<TransactionResponse> getAllTransactions(){
         return transactionService.getAllTransactions();
     }
 
-    @PostMapping("/{accountId}/deposit")
-    public Mono<Transaction> deposit(@PathVariable String accountId, @RequestBody AmountRequest request){
+    @PostMapping("/accounts/{accountId}/deposit")
+    public Mono<TransactionResponse> deposit(@PathVariable String accountId, @RequestBody AmountRequest request){
         return transactionService.deposit(accountId, request);
     }
 
-    @PostMapping("/{accountId}/withdrawal")
-    public  Mono<Transaction> withdrawal(@PathVariable String accountId, @RequestBody AmountRequest request){
+    @PostMapping("/accounts/{accountId}/withdrawal")
+    public Mono<TransactionResponse> withdrawal(@PathVariable String accountId, @RequestBody AmountRequest request){
         return transactionService.withdrawal(accountId, request);
     }
 
-
-
-    @PostMapping("/transfer")
-    public Mono<Transaction> transfer(@RequestBody RequestTransfer request){
+    @PostMapping("/accounts/transfer")
+    public Mono<TransactionResponse> transfer(@RequestBody TransferRequest request){
         return transactionService.transfer(request);
     }
 }
